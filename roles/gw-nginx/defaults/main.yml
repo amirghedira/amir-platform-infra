@@ -1,6 +1,6 @@
 ---
 gzip_enable: "on"
-local_tunnel_url: http://comwork-rpi-12.lt.Amir Platform.com:3200
+local_tunnel_url: ""
 default_max_body_size: 50M
 nginx_conf_path: /etc/nginx
 worker_connections: 2024
