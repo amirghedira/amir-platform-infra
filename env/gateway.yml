@@ -16,7 +16,10 @@ sudo_users:
     passwd: no
 
 
-gw_upstreams: []
+gw_upstreams:
+  - name: prod-amir-api
+    members:
+      - localhost:5000
 
 gw_auth_files: []
 
@@ -26,7 +29,8 @@ gw_proxies:
     redirect_domain: www.amirghedira.com
 
   - domain: api.amirghedira.com
-    target: localhost:5000
+    target: prod-amir-api
+    conf: tool_proxy
 
   - domain: www.amirghedira.com
     target: localhost:3000
