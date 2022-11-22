@@ -1,0 +1,6 @@
+proxy_pass {{ local_tunnel_url }};
+proxy_set_header Bypass-Tunnel-Reminder true;
+proxy_read_timeout 300;
+proxy_connect_timeout 300;
+proxy_send_timeout 300;
+include /etc/nginx/proxy_buffering.conf;

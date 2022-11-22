@@ -1,0 +1,30 @@
+---
+- name: Install sudo packages
+  become: yes
+  yum:
+    name:
+      - sudo
+    state: present
+
+- name: Ensure users are created
+  become: yes
+  user:
+    name: "{{ item.name }}"
+  with_items: "{{ sudo_users }}"
+
+- name: Generate sudoers file
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0440'
+    owner: root
+    group: root
+  with_items:
+    - { path: "/etc", file: "sudoers"}
+
+- name: Remove sudoers.d directory
+  become: yes
+  file:
+    state: absent
+    path: /etc/sudoers.d

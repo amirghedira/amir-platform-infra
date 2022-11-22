@@ -1,0 +1,11 @@
+{% for item in gw_deny_ips %}
+{% if item.ip is defined %}
+{% if item.cidr is defined %}
+deny {{ item.ip }}/{{ item.cidr }};
+{% else %}
+deny {{ item.ip }};
+{% endif %}
+{% else %}
+deny {{ item }};
+{% endif %}
+{% endfor %}

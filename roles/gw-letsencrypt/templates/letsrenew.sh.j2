@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+{% for path in cron_path %}
+export PATH="${PATH}:{{ path }}"
+{% endfor %}
+
+{{ certbot_bin }} renew --force-renewal > "{{ node_home }}/letsencrypt.log" 2>&1

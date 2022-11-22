@@ -1,0 +1,6 @@
+---
+nofile: 65535
+file_max: 512000
+selinux_status: disabled
+deploy_user: almalinux
+root_password: Z#@musoundio@Z#@121212678!!@Z#@#@@

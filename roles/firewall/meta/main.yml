@@ -1,0 +1,10 @@
+galaxy_info:
+  role_name: fail2ban
+  author: Amir Ghedira
+  description: Install and configure firewall based on ufw
+  company: Amir Platform
+
+  min_ansible_version: 2.2
+
+  platforms:
+    - name: CentOS

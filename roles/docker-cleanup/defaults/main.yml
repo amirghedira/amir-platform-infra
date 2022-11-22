@@ -1,0 +1,6 @@
+---
+scw_registry_region: fr-par
+scw_registry_auth_token: f501ad8e-5dcb-4e1b-b2a1-ea1d1f49b72f
+scw_registry_tags_to_keep: 3
+scw_registry_api: https://api.scaleway.com/registry/v1/regions
+scw_registry_force_delete: true

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+[[ "{{ gitlab_runner_token }}" == "changeit" || "{{ gitlab_runner_token }}" == "tochange" ]] && /usr/local/bin/gitlab-runner register --non-interactive --url "{{ gitlab_url }}" --registration-token "{{ gitlab_registration_token }}" --executor "shell" --description "{{ node_name }}" --tag-list "{{ node_name }},infra-{{ node_name }}" --run-untagged="true" --locked="false" --access-level="not_protected" >/root/register.log 2>&1
+cat {{ gitlab_default_conf }} | awk -F "[[:space:]]*=[[:space:]]*" '($0 ~ "token"){gsub("\"", "", $2); print $2}' | head -1

@@ -1,0 +1,22 @@
+---
+- name: Install firewall packages
+  become: yes
+  yum:
+    name:
+      - ufw
+    state: present
+
+- name: Creation of firewall config
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - { path: "{{ node_home }}", file: "reset_ufw.sh"}
+
+- name: Reload rules
+  become: yes
+  command: "bash {{ node_home }}/reset_ufw.sh & disown"

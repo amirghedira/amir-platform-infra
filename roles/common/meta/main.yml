@@ -1,0 +1,10 @@
+galaxy_info:
+  role_name: common
+  author: Amir Ghedira
+  description: Common role for Amir Platform servers
+  company: Amir Platform
+
+  min_ansible_version: 2.2
+
+  platforms:
+    - name: CentOS

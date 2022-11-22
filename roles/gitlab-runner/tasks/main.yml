@@ -1,0 +1,67 @@
+---
+- name: Remove bash logout
+  become: yes
+  command: rm -rf {{ item.path }}/{{ item.filename }}
+  with_items:
+    - { filename: ".bash_logout" , path: "{{ node_home }}" }
+
+- name: Create gitlab-runner installation script
+  become: yes
+  template:
+    src: "{{ item.template }}.j2"
+    dest: "{{ item.path }}/{{ item.template }}"
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - { template: install_gitlab_runner.sh , path: "{{ node_home }}" }
+    - { template: gitlab_runner_register.sh , path: "{{ node_home }}" }
+
+- name: Install gitlab-runner dependancies
+  become: yes
+  command: "bash {{ node_home }}/install_gitlab_runner.sh"
+  ignore_errors: yes
+
+- name: Register gitlab runner
+  become: yes
+  command: "bash {{ node_home }}/gitlab_runner_register.sh"
+  register: stdout_gitlab_runner_register_token
+
+- name: Create gitlab-runner systemd service
+  become: yes
+  template:
+    src: "{{ item.template }}.j2"
+    dest: "{{ item.path }}/{{ item.template }}"
+    mode: '0644'
+    owner: root
+    group: root
+  with_items:
+    - { template: gitlab-runner.service , path: "{{ systemd_dir }}" }
+
+- name: Create .gitlab-runner directory
+  become: yes
+  file:
+    path: "{{ node_home }}/.gitlab-runner"
+    owner: "{{ node_user }}"
+    group: "{{ node_user }}"
+    mode: 0744
+    state: directory
+
+- name: Create gitlab-runner toml config file
+  become: yes
+  template:
+    src: "{{ item.template }}.j2"
+    dest: "{{ item.path }}/{{ item.template }}"
+    mode: '0644'
+    owner: "{{ node_user }}"
+    group: root
+  with_items:
+    - { template: config.toml , path: "{{ node_home }}/.gitlab-runner" }
+
+- name: Restart service gitlab-runner
+  become: yes
+  ansible.builtin.systemd:
+    name: gitlab-runner
+    state: started
+    daemon_reload: yes
+    enabled: yes

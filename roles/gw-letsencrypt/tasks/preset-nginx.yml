@@ -1,0 +1,53 @@
+---
+- name: Yum repo for nginx
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0644'
+    owner: root
+    group: root
+  with_items:
+    - { path: "/etc/yum.repos.d", file: "nginx.repo"}
+
+- name: Install nginx packages
+  become: yes
+  yum:
+    name:
+      - nginx
+    state: present
+
+
+- name: Remove old configuration files
+  become: yes
+  file:
+    state: absent
+    path: "{{ item.path }}/{{ item.file }}"
+  with_items:
+    - { path: "{{ nginx_conf_path }}/conf.d", file: "default.conf"}
+
+- name: Creation of nginx configuration file
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0644'
+    owner: root
+    group: root
+  with_items:
+    - { path: "{{ nginx_conf_path }}", file: "nginx.conf"}
+
+
+- name: Verify Nginx configuration before restarting
+  become: yes
+  command: nginx -t
+  changed_when: false
+
+
+- name: Restart service nginx
+  become: yes
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

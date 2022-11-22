@@ -1,0 +1,7 @@
+{
+  "log-driver": "json-file",
+  "log-opts": {"max-size": "{{ log_max_size }}", "max-file": "{{ log_max_file }}"}
+{% if docker_dns is defined and docker_dns %}
+  , "dns": {{ docker_dns | to_json }}
+{% endif %}
+}

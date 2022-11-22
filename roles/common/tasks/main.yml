@@ -1,0 +1,35 @@
+---
+- name: change root password
+  become: yes
+  user:
+    name: root
+    password: "{{ root_password | password_hash('sha512') }}"
+
+
+
+
+- name: Disable SELinux
+  become: yes
+  command: "setenforce 0"
+  ignore_errors: yes
+
+- name: Deploy user is created
+  become: yes
+  user:
+    name: "{{ deploy_user }}"
+
+- name: Start service snapd
+  become: yes
+  ansible.builtin.systemd:
+    name: snapd
+    state: started
+    daemon_reload: yes
+    enabled: yes
+
+- name: Snapd symlink
+  ansible.builtin.file:
+    src: /var/lib/snapd/snap
+    dest: /snap
+    owner: root
+    group: root
+    state: link

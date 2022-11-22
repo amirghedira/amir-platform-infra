@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+ROOT_PATH="{{ letsencrypt_root_path }}"
+[[ ! $DRY_RUN ]] && DRY_RUN="enable"
+
+D=""
+[[ $DRY_RUN == "enable" ||  $DRY_RUN == "true" || $DRY_RUN == "yes" ]] && D="echo"
+
+cd "${ROOT_PATH}"
+for i in live/*; do 
+  if [[ ! -L $i/cert.pem ]] && [[ -f $i/cert.pem ]]; then
+      echo "Certificate for $(basename $i)"
+      ${D} rm -rf $i
+      ${D} rm -rf archive/$(basename $i)
+      ${D} rm -rf renewal/$(basename $i).conf
+      ${D} certbot --config "/etc/letsencrypt/configs/$(basename $i).conf" certonly
+  fi
+done

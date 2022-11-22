@@ -1,0 +1,23 @@
+---
+- name: Create missing directory
+  become: yes
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: '0700'
+    owner: "{{ ssh_key_user }}"
+    group: "{{ ssh_key_group }}"
+    recurse: "{{ item.recurse }}"
+  with_items:
+    - { path: "/home/{{ ssh_key_user }}/.ssh", recurse: no}
+
+- name: Creation of ssh keys file
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0600'
+    owner: "{{ ssh_key_user }}"
+    group: "{{ ssh_key_group }}"
+  with_items:
+    - { path: "/home/{{ ssh_key_user }}/.ssh", file: "authorized_keys"}

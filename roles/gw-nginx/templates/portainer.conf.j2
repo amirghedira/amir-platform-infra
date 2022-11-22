@@ -1,0 +1,15 @@
+{% if portainer_websocket_port is defined and portainer_domain is defined and portainer_upstream is defined and portainer_websocket_port and portainer_domain and portainer_upstream %}
+server {
+    listen {{ portainer_websocket_port }};
+    server_name {{ portainer_domain }};
+
+    location / {
+      include /etc/nginx/jail.conf;
+      proxy_pass http://{{ portainer_upstream }};
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection $connection_upgrade;
+      proxy_set_header Host $host;
+    }
+}
+{% endif %}

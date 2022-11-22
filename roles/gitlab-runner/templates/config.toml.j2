@@ -1,0 +1,21 @@
+concurrent = 1
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "{{ node_name }}"
+  url = "{{ gitlab_url }}"
+{% if gitlab_runner_token != "changeit" and gitlab_runner_token != "tochange" %}
+  token = "{{ gitlab_runner_token }}"
+{% else %}
+  token = "{{ stdout_gitlab_runner_register_token.stdout }}"
+{% endif %}
+
+  executor = "shell"
+  [runners.custom_build_dir]
+  [runners.cache]
+    [runners.cache.s3]
+    [runners.cache.gcs]
+    [runners.cache.azure]

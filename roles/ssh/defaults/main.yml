@@ -1,0 +1,4 @@
+---
+ssh_conf_path: /etc/ssh
+permit_root_login: "no"
+password_authentication: "no"

@@ -1,0 +1,20 @@
+---
+letsencrypt_root_path: /etc/letsencrypt
+contact_email: contact@amirghedira.com
+rsa_key_size: 2048
+letsencrypt_webroot_path: /var/www/letsencrypt/
+nginx_conf_path: /etc/nginx
+gw_proxies: []
+certbot_bin: /var/lib/snapd/snap/bin/certbot
+config_path: /etc/letsencrypt/configs
+certbot_packages: python3-certbot-nginx
+letsencrypt_choice: 'y'
+
+cron_path:
+  - /usr/local/sbin
+  - /usr/local/bin
+  - /sbin
+  - /bin
+  - /usr/sbin
+  - /usr/bin
+  - /root/bin

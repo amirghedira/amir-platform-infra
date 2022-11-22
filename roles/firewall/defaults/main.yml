@@ -1,0 +1,16 @@
+---
+old_firewalls:
+  - firewalld
+  - iptables
+
+firewall_systemd: true
+
+firewall_allow:
+  - port: 80
+  - port: 22
+  - port: 443
+
+firewall_deny:
+  - port: 9000
+  - ip: 185.191.32.0
+    cidr: 24

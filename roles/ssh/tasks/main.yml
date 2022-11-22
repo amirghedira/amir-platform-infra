@@ -1,0 +1,28 @@
+---
+- name: Install ssh packages
+  become: yes
+  yum:
+    name:
+      - openssh-server
+      - openssh-clients
+    state: present
+
+- name: Creation of sshd config files
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0644'
+    owner: root
+    group: root
+  with_items:
+    - { path: "{{ ssh_conf_path }}", file: "ssh_config"}
+    - { path: "{{ ssh_conf_path }}", file: "sshd_config"}
+
+- name: Restart service sshd
+  become: yes
+  ansible.builtin.systemd:
+    name: sshd
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

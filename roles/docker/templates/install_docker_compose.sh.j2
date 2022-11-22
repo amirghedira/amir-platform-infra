@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if docker-compose -v >/dev/null 2>&1; then
+  echo "No need to install docker-compose"
+else
+  curl -L "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  chmod +x /usr/local/bin/docker-compose
+fi
+
+if [[ ! -f /usr/bin/docker-compose && -f /usr/local/bin/docker-compose ]]; then
+  ln -s /usr/local/bin/docker-compose /usr/bin/
+fi

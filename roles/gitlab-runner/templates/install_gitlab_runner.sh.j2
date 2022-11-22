@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if gitlab-runner --version 2>/dev/null; then
+  echo "Gitlab runner is already installed"
+else
+  curl -LJO "https://gitlab-runner-downloads.s3.amazonaws.com/latest/rpm/gitlab-runner_amd64.rpm"
+  sudo rpm -ivh gitlab-runner_amd64.rpm 
+  [[ ! -f /usr/bin/gitlab-runner ]] && [[ -f /usr/local/bin/gitlab-runner ]] && sudo ln -s /usr/local/bin/gitlab-runner /usr/bin/
+fi

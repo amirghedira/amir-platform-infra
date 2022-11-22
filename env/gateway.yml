@@ -1,0 +1,33 @@
+---
+node_home: /root
+
+node_name: gw
+filebeat_index_pattern: gw
+gitlab_runner_token: GR1348941nnE4kedUdLERV8C4ag9D
+
+docker_users:
+  - almalinux
+  - gitlab-runner
+
+sudo_users:
+  - name: almalinux
+    passwd: no
+  - name: gitlab-runner
+    passwd: no
+
+
+gw_upstreams: []
+
+gw_auth_files: []
+
+gw_proxies: []
+
+
+firewall_allow:
+  - port: 80
+  - port: 22
+  - port: 443
+
+gw_deny_ips:
+  - ip: 91.140.0.0
+    cidr: 16

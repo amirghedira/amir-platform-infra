@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+LOG_FILE="{{ node_home }}/ufw.log"
+
+{% for item in old_firewalls %}
+systemctl stop {{ item }} || :
+systemctl disable {{ item }} || :
+{% endfor %}
+
+echo "Start: $(date)" > "${LOG_FILE}" 2>&1
+yes | ufw disable >> "${LOG_FILE}" 2>&1
+yes | ufw reset >> "${LOG_FILE}" 2>&1
+
+{% for item in firewall_allow %}
+{% if item.port is defined %}
+{% if item.ip is defined %}
+echo "allow from ip = {{ item.ip }} port = {{ item.port }}" >> "${LOG_FILE}" 2>&1
+ufw allow from {{ item.ip }} to any port {{ item.port }} >> "${LOG_FILE}" 2>&1
+{% else %}
+echo "allow {{ item.port }}" >> "${LOG_FILE}" 2>&1
+ufw allow {{ item.port }} >> "${LOG_FILE}" 2>&1
+{% endif %}
+{% else %}
+{% if item.ip is defined %}
+echo "allow from {{ item.ip }}/{{ item.cidr }}" >> "${LOG_FILE}" 2>&1
+ufw allow from {{ item.ip }}/{{ item.cidr }} >> "${LOG_FILE}" 2>&1
+{% else %}
+echo "allow {{ item }}" >> "${LOG_FILE}" 2>&1
+ufw allow {{ item }} >> "${LOG_FILE}" 2>&1
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{% for item in firewall_deny %}
+{% if item.port is defined %}
+echo "deny {{ item.port }}" >> "${LOG_FILE}" 2>&1
+ufw deny {{ item.port }} >> "${LOG_FILE}" 2>&1
+{% else %}
+{% if item.ip is defined %}
+{% if item.cidr is defined %}
+echo "deny from {{ item.ip }}/{{ item.cidr }}" >> "${LOG_FILE}" 2>&1
+ufw deny from {{ item.ip }}/{{ item.cidr }} >> "${LOG_FILE}" 2>&1
+echo "deny to {{ item.ip }}/{{ item.cidr }}" >> "${LOG_FILE}" 2>&1
+ufw deny to {{ item.ip }}/{{ item.cidr }} >> "${LOG_FILE}" 2>&1
+{% else %}
+echo "deny from {{ item.ip }}" >> "${LOG_FILE}" 2>&1
+ufw deny from {{ item.ip }} >> "${LOG_FILE}" 2>&1
+echo "deny to {{ item.ip }}" >> "${LOG_FILE}" 2>&1
+ufw deny to {{ item.ip }} >> "${LOG_FILE}" 2>&1
+{% endif %}
+{% else %}
+echo "deny {{ item }}" >> "${LOG_FILE}" 2>&1
+ufw deny {{ item }} >> "${LOG_FILE}" 2>&1
+{% endif %}
+{% endif %}
+{% endfor %}
+
+yes | ufw enable >> "${LOG_FILE}" 2>&1
+
+{% if firewall_systemd is defined and firewall_systemd %}
+systemctl enable ufw >> "${LOG_FILE}" 2>&1
+systemctl restart ufw >> "${LOG_FILE}" 2>&1
+{% endif %}
+
+echo "End: $(date)" >> "${LOG_FILE}" 2>&1

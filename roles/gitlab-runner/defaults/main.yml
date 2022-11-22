@@ -1,0 +1,7 @@
+---
+node_user: root
+systemd_dir: /etc/systemd/system
+gitlab_url: "https://gitlab.comwork.io"
+gitlab_registration_token: czbVSyjnKq_BautYtXvJ
+gitlab_runner_token: changeit
+gitlab_default_conf: /etc/gitlab-runner/config.toml

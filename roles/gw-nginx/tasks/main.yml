@@ -1,0 +1,59 @@
+---
+
+- name: Create missing directories
+  become: yes
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: '0755'
+    owner: 'root'
+    group: 'root'
+    recurse: "{{ item.recurse }}"
+  with_items:
+    - { path: "{{ nginx_conf_path }}/auth", recurse: yes}
+
+- name: Create authentication files
+  become: yes
+  template:
+    src: "auth.keys.j2"
+    dest: "{{ nginx_conf_path }}/auth/{{ item.name }}"
+    mode: '0644'
+    owner: root
+    group: root
+  with_items: "{{ gw_auth_files }}"
+
+- name: Creation of nginx config files
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0644'
+    owner: root
+    group: root
+  with_items:
+    - { path: "{{ nginx_conf_path }}", file: "jail.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "gateway_custom_headers.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "default_proxy.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "https_server.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "nginx.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "proxy_buffering.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "public_api_proxy.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "rpitunnel.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "tool_proxy.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "websocket_proxy.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "portainer.conf"}
+    - { path: "{{ nginx_conf_path }}", file: "fastcgi_params"}
+
+- name: Verify Nginx configuration before restarting
+  become: yes
+  command: nginx -t
+  changed_when: false
+
+
+- name: Restart service nginx
+  become: yes
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

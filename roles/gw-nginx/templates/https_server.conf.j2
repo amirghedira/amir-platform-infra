@@ -1,0 +1,4 @@
+listen 443 ssl;
+ssl_ciphers "HIGH:!aNULL:!MD5:!ADH:!RC4:!DH";
+ssl_prefer_server_ciphers on;
+gzip {{ gzip_enable }};

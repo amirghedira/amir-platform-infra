@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+DOMAIN="$1"
+CERT_NAME="$2"
+
+echo "{{ letsencrypt_choice }}"|{{ certbot_bin }} --config "{{ letsencrypt_root_path }}/configs/${DOMAIN}.conf" --cert-name "${CERT_NAME}" --non-interactive  certonly > "{{ node_home }}/letsencrypt-${DOMAIN}.log" 2>&1

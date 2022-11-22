@@ -1,0 +1,83 @@
+---
+- name: Install docker repository EL8
+  yum_repository:
+    name: '{{ item.name }}'
+    description: '{{ item.desc }}'
+    file: docker-ce
+    baseurl: '{{ item.baseurl }}'
+    enabled: '1'
+    gpgcheck: yes
+    gpgkey: 'https://download.docker.com/linux/centos/gpg'
+    state: present
+  with_items:
+    - { name: 'docker-ce-stable', desc: 'Docker CE Stable - $basearch', baseurl: 'https://download.docker.com/linux/centos/8/$basearch/stable'}
+    - { name: 'docker-ce-edge', desc: 'Docker CE Edge - $basearch', baseurl: 'https://download.docker.com/linux/centos/8/$basearch/edge'}
+    - { name: 'docker-ce-test', desc: 'Docker CE Test - $basearch', baseurl: 'https://download.docker.com/linux/centos/8/$basearch/test'}
+
+- name: Install docker-ce package
+  become: yes
+  yum:
+    name:
+      - docker-ce
+    state: present
+
+- name: Add user to docker group
+  become: yes
+  command: usermod -aG docker {{ item }}
+  with_items: "{{ docker_users }}"
+
+- name: Prepare docker-compose install script
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - { path: "{{ node_home }}", file: "install_docker_compose.sh"}
+
+- name: Install docker-compose
+  become: yes
+  command: "bash {{ node_home }}/install_docker_compose.sh"
+
+- name: Create missing directories
+  become: yes
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+    recurse: "{{ item.recurse }}"
+  with_items:
+    - { path: "/etc/docker", recurse: no}
+
+- name: Docker config
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0644'
+    owner: root
+    group: root
+  with_items:
+    - { path: "/etc/docker", file: "daemon.json"}
+
+- name: Restart service docker
+  become: yes
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  when: docker_restart is defined and docker_restart
+
+- name: Start service docker
+  become: yes
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    daemon_reload: yes
+    enabled: yes
+  when: docker_restart is not defined or not docker_restart

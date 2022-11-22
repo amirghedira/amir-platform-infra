@@ -1,0 +1,13 @@
+- hosts: localhost
+  roles:
+    - sudo
+    - common
+    - ssh
+    - ssh-keys
+    - firewall
+    - docker
+    - gw-letsencrypt
+    - gw-nginx
+    - docker-cleanup
+    - gitlab-runner
+

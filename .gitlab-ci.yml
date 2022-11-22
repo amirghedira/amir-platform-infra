@@ -1,0 +1,27 @@
+stages:
+  - deploy
+
+musoundio-infra:
+  stage: deploy
+  script:
+    - chmod +x ./install.sh
+    - ./install.sh -e gateway
+  only:
+    refs:
+      - /^(main.*)$/
+    changes:
+      - env/gateway.yml
+      - roles/sudo/**/*
+      - roles/common/**/*
+      - roles/ssh/**/*
+      - roles/fail2ban/**/*
+      - roles/kinsing/**/*
+      - roles/firewall/**/*
+      - roles/docker/**/*
+      - roles/gw-letsencrypt/**/*
+      - roles/gw-nginx/**/*
+      - roles/gitlab-runner/**/*
+      - install.sh
+      - playbook-gateway.yml
+  tags:
+    - amirplatform

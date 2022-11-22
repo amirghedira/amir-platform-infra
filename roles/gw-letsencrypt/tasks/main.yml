@@ -1,0 +1,85 @@
+
+---
+- name: Prepair ansible facts packages
+  package_facts:
+    manager: "auto"
+
+- include: preset-nginx.yml
+  when: "'nginx' not in ansible_facts.packages and (letsencrypt_disable_nginx is undefined or not letsencrypt_disable_nginx)"
+
+- name: Install certbot packages
+  become: yes
+  yum:
+    name: "{{ certbot_packages }}"
+    state: present
+
+- name: Create missing directories
+  become: yes
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+    recurse: yes
+  with_items:
+    - { path: "{{ letsencrypt_root_path }}/configs" }
+    - { path: "{{ letsencrypt_webroot_path }}" }
+
+- name: Create letsencrypt scripts
+  become: yes
+  template:
+    src: "{{ item.template }}.j2"
+    dest: "{{ item.path }}/{{ item.template }}"
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - { template: generate_letsencrypt_cert.sh , path: "{{ node_home }}" }
+    - { template: fix_corrupted_certificates.sh , path: "{{ node_home }}" }
+    - { template: "letsrenew.sh", path: "{{ node_home }}" }
+
+- name: Creation of letsencrypt files
+  become: yes
+  template:
+    src: "renew.conf.j2"
+    dest: "{{ letsencrypt_root_path }}/configs/{{ item.domain }}.conf"
+    mode: '0755'
+    owner: root
+    group: root
+  with_items: "{{ gw_proxies }}"
+
+- name: Creation of letsencrypt files
+  become: yes
+  template:
+    src: "renew.conf.j2"
+    dest: "{{ letsencrypt_root_path }}/configs/{{ item.domain }}.conf"
+    mode: '0755'
+    owner: root
+    group: root
+  with_items: "{{ gw_proxies }}"
+
+
+- name: "Check if Certificate exists"
+  stat:
+    path: "/etc/letsencrypt/live/{{ item.domain }}/fullchain.pem"
+  register: "TARGET_RESULTS"
+  when: (item.cert_suffix is undefined) and ((item.stat.exists is undefined) or (not item.stat.exists))
+  loop: "{{ gw_proxies }}"
+
+- name: Generate certificates for the first time
+  command: "bash {{ node_home }}/generate_letsencrypt_cert.sh {{ item.1.domain }}"
+  when: (item.1.cert_suffix is undefined) and ((item.0.stat.exists is undefined) or (not item.0.stat.exists))
+  with_together:
+    - "{{ TARGET_RESULTS.results }}"
+    - "{{ gw_proxies }}"
+
+- name: Creates letsencrypt cron
+  ansible.builtin.cron:
+    name: letsencrypt cron
+    month: "*/1"
+    minute: "0"
+    hour: "0"
+    user: root
+    job: "bash {{ node_home }}/letsrenew.sh"
+    cron_file: ansible_letsrenew

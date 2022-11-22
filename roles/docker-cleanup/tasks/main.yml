@@ -1,0 +1,22 @@
+---
+- name: Creation of clean up script
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - { path: "{{ node_home }}", file: "docker-cleanup.sh"}
+
+- name: Creates clean up cron
+  ansible.builtin.cron:
+    name: "{{ item.file }}"
+    minute: "{{ item.minute }}"
+    hour: "{{ item.hour }}"
+    user: root
+    job: "{{ item.interpreter }} {{ node_home }}/{{ item.script }} > {{ node_home }}/{{ item.script }}.log 2>&1"
+    cron_file: "{{ item.file }}"
+  with_items: 
+    - { interpreter: "bash", script: "docker-cleanup.sh", hour: "23", minute: "0", file: "ansible_docker_clean_up" }
