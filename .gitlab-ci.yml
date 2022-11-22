@@ -1,7 +1,7 @@
 stages:
   - deploy
 
-musoundio-infra:
+amir-gateway:
   stage: deploy
   script:
     - chmod +x ./install.sh
