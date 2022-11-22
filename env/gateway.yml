@@ -20,7 +20,14 @@ gw_upstreams: []
 
 gw_auth_files: []
 
-gw_proxies: []
+gw_proxies:
+
+  # - domain: amirghedira.com
+  #   redirect_domain: www.amirghedira.com
+
+  - domain: api.amirghedira.com
+    target: localhost:3000
+
 
 
 firewall_allow:
