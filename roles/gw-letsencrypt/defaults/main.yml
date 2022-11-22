@@ -5,7 +5,7 @@ rsa_key_size: 2048
 letsencrypt_webroot_path: /var/www/letsencrypt/
 nginx_conf_path: /etc/nginx
 gw_proxies: []
-certbot_bin: /var/lib/snapd/snap/bin/certbot
+certbot_bin: certbot
 config_path: /etc/letsencrypt/configs
 certbot_packages: python3-certbot-nginx
 letsencrypt_choice: 'y'

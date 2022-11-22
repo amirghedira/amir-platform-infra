@@ -17,19 +17,3 @@
   become: yes
   user:
     name: "{{ deploy_user }}"
-
-- name: Start service snapd
-  become: yes
-  ansible.builtin.systemd:
-    name: snapd
-    state: started
-    daemon_reload: yes
-    enabled: yes
-
-- name: Snapd symlink
-  ansible.builtin.file:
-    src: /var/lib/snapd/snap
-    dest: /snap
-    owner: root
-    group: root
-    state: link

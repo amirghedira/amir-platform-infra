@@ -1,8 +1,8 @@
 galaxy_info:
   role_name: ssh-keys
-  author: Idriss Neumann
+  author: Amir Ghedira
   description: Install and configure ssh keys
-  company: Comwork
+  company: Amir Platform
 
   min_ansible_version: 2.2
 
