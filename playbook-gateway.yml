@@ -1,6 +1,6 @@
 - hosts: localhost
   roles:
-    - sudo
+    # - sudo
     - common
     - ssh
     - ssh-keys
