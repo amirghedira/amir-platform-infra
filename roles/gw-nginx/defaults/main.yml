@@ -16,6 +16,6 @@ gw_deny_ips: []
 public_api_allow_origin: "*"
 public_api_allow_credentials: "true"
 public_api_http_methods: GET, POST, PUT, DELETE, PATCH ,OPTIONS, HEAD
-public_api_http_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Access-Control-Allow-Origin,Authorization,Accept,remember-me,xsrf-token,X-XSS-Protection,Referer,sec-ch-ua,sec-ch-ua-mobile,sec-ch-ua-platform,X-User-Token
+public_api_http_headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Access-Control-Allow-Origin,Authorization,Accept,remember-me,xsrf-token,X-XSS-Protection,Referer,sec-ch-ua,sec-ch-ua-mobile,sec-ch-ua-platform,X-User-IP
 
 public_api_control_max_age: 1728000
