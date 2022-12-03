@@ -9,8 +9,8 @@ mirror:
     refs:
       - /^(main.*)$/
   script:
-    - chmod +x ./ci/deliver.sh
-    - ./ci/mirror.sh
+    - chmod +x ./mirror.sh
+    - ./mirror.sh
   tags:
     - amirplatform
 
