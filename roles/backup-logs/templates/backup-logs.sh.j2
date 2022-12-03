@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+log_file=$(date +"log-%Y-%m-%d.log" -d yesterday)
+
+echo "Backing up ${log_file} into {{ s3_backup_bucket_name }}"
+mc cp "{{ logs_directory }}/${log_file} {{ s3_alias }}/{{ s3_backup_bucket_name }}/logs/${log_file}"
+echo "Finish backing up ${log_file} into {{ s3_backup_bucket_name }}"

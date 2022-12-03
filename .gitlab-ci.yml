@@ -19,6 +19,7 @@ amir-gateway:
       - roles/firewall/**/*
       - roles/docker/**/*
       - roles/gw-letsencrypt/**/*
+      - roles/backup-logs/**/*
       - roles/gw-nginx/**/*
       - roles/gitlab-runner/**/*
       - install.sh

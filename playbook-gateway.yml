@@ -9,5 +9,6 @@
     - gw-letsencrypt
     - gw-nginx
     - docker-cleanup
+    - backup-logs
     - gitlab-runner
 
