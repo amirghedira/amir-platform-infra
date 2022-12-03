@@ -1,5 +1,18 @@
 stages:
+  - mirror
   - deploy
+
+
+mirror:
+  stage: mirror
+  only:
+    refs:
+      - /^(main.*)$/
+  script:
+    - chmod +x ./ci/deliver.sh
+    - ./ci/mirror.sh
+  tags:
+    - amirplatform
 
 amir-gateway:
   stage: deploy
