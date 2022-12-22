@@ -15,4 +15,4 @@ done
 echo "${VAROPTS}"
 creating_env_file
 source .env
-sudo ansible-playbook $PLAYBOOK -e "$VAROPTS" --extra-vars "mongo_uri=${CI_MONGO_URI} slack_token=${CI_SLACK_TOKEN}"
+sudo ansible-playbook $PLAYBOOK -e "$VAROPTS" --extra-vars "mongodb_uri=${CI_MONGO_URI} slack_token=${CI_SLACK_TOKEN}"
