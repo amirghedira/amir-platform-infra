@@ -10,3 +10,7 @@ schemas:
   - notifications
   - banned
   - topics
+
+slack_username: amir-platform-api
+slack_channel: "#amir-platform-api"
+slack_token: T048H296FU6/B049F180H6J/7g8hewoqK4Uv3QbZhJIobw9i

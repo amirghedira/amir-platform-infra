@@ -11,6 +11,17 @@
   with_items:
     - { path: "{{ node_home }}", file: "backup-mongodb.sh"}
 
+- name: Creation of slack notification script
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - { path: "{{ node_home }}", file: "slack_notification.sh"}
+
 - name: Creates backup cron
   ansible.builtin.cron:
     name: "{{ item.file }}"
