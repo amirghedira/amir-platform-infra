@@ -13,5 +13,5 @@ echo "Compressing backup to {{ backup_dir }}/${backup_file_name}.tar.gz"
 tar -zcvf "{{ backup_dir }}/${backup_file_name}.tar.gz" "{{ backup_dir }}/${backup_file_name}"
 
 echo "Uploading to S3 backup ${backup_file_name}"
-mc cp {{ backup_dir }}/${backup_file_name} {{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${log_file}
+mc cp "{{ backup_dir }}/${backup_file_name}.tar.gz" "{{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${backup_file_name}.tar.gz"
 echo "Finish backing up ${backup_file_name} into {{ s3_backup_bucket_name }}"
