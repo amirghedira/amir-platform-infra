@@ -5,11 +5,7 @@ environment_set(){
     export PLAYBOOK="playbook-${env}.yml"
     export VAROPTS="@env/${env}.yml"
 }
-creating_env_file(){
 
-    echo "SLACK_TOKEN=${CI_SLACK_TOKEN}" > ".env"
-    echo "MONGO_URI=${CI_MONGO_URI}" >> ".env"
-}
 while getopts ":e:" option; do 
   case "$option" in 
     e) environment_set $OPTARG ;;
@@ -19,4 +15,4 @@ done
 echo "${VAROPTS}"
 creating_env_file
 source .env
-sudo ansible-playbook $PLAYBOOK -e "$VAROPTS"
+sudo ansible-playbook $PLAYBOOK -e "$VAROPTS" --extra-vars "mongo_uri=${CI_MONGO_URI} slack_token=${CI_SLACK_TOKEN}"

@@ -6,9 +6,6 @@ filebeat_index_pattern: gw
 gitlab_runner_token: GR1348941nnE4kedUdLERV8C4ag9D
 
 
-mongodb_uri: "{{ lookup('env','MONGO_URI') }}"
-slack_token: "{{ lookup('env','SLACK_TOKEN') }}"
-
 docker_users:
   - almalinux
   - gitlab-runner
