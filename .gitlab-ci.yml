@@ -31,6 +31,7 @@ amir-gateway:
       - roles/kinsing/**/*
       - roles/firewall/**/*
       - roles/docker/**/*
+      - roles/backup-mongodb/**/*
       - roles/gw-letsencrypt/**/*
       - roles/backup-logs/**/*
       - roles/gw-nginx/**/*

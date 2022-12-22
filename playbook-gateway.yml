@@ -1,14 +1,15 @@
 - hosts: localhost
   roles:
-    - sudo
-    - common
-    - ssh
-    - ssh-keys
-    - firewall
-    - docker
-    - gw-letsencrypt
-    - gw-nginx
-    - docker-cleanup
+    # - sudo
+    # - common
+    # - ssh
+    # - ssh-keys
+    # - firewall
+    # - docker
+    # - gw-letsencrypt
+    # - gw-nginx
+    # - docker-cleanup
     - backup-logs
-    - gitlab-runner
+    - backup-mongodb
+    # - gitlab-runner
 

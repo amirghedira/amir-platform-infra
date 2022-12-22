@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+
+backup_file_name=$(date +"backup-%d-%m-%Y" -d yesterday)
+
+echo "Backing up database into {{ s3_backup_bucket_name }}"
+{% for schema in schemas %}
+echo "Extracting schema {{ schema }}"
+mongoexport --uri="{{ mongodb_uri }}"  --collection={{ schema }}  --out={{ backup_dir }}/${backup_file_name}/{{ schema }}.json
+{% endfor %}
+
+echo "Compressing backup to {{ backup_dir }}/${backup_file_name}.tar.gz"
+tar -zcvf "{{ backup_dir }}/${backup_file_name}.tar.gz" "{{ backup_dir }}/${backup_file_name}"
+
+echo "Uploading to S3 backup ${backup_file_name}"
+mc cp {{ backup_dir }}/${backup_file_name} {{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${log_file}
+echo "Finish backing up ${backup_file_name} into {{ s3_backup_bucket_name }}"

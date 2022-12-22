@@ -1,0 +1,10 @@
+galaxy_info:
+  role_name: backup-mongodb
+  author: Amir Ghedira
+  description: create cron to backup mongodb data to s3
+  company: Amir Platform
+
+  min_ansible_version: 2.2
+
+  platforms:
+    - name: CentOS

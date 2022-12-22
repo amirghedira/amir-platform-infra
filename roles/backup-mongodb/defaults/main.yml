@@ -1,0 +1,12 @@
+---
+logs_directory: /var/log/amir-platform
+s3_alias: amirplatform-data
+s3_backup_bucket_name: amirplatform-data
+mongodb_uri: mongodb+srv://amirghediradb:bfDICLDyuklvKGDo@cluster0-bjmuu.mongodb.net/test
+backup_dir: /root/mongodb-backups
+schemas: 
+  - users
+  - projects
+  - notifications
+  - banned
+  - topics

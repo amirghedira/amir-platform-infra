@@ -1,0 +1,23 @@
+---
+
+- name: Creation of backup mongodb script
+  become: yes
+  template:
+    src: "{{ item.file }}.j2"
+    dest: "{{ item.path }}/{{ item.file }}"
+    mode: '0755'
+    owner: root
+    group: root
+  with_items:
+    - { path: "{{ node_home }}", file: "backup-mongodb.sh"}
+
+- name: Creates backup cron
+  ansible.builtin.cron:
+    name: "{{ item.file }}"
+    minute: "{{ item.minute }}"
+    hour: "{{ item.hour }}"
+    user: root
+    job: "{{ item.interpreter }} {{ node_home }}/{{ item.script }} > {{ node_home }}/{{ item.script }}.log 2>&1"
+    cron_file: "{{ item.file }}"
+  with_items: 
+    - { interpreter: "bash", script: "backup-mongodb.sh", hour: "0", minute: "0", file: "ansible_backup_mongodb" }
