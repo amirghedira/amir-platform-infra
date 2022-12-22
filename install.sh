@@ -16,5 +16,6 @@ while getopts ":e:" option; do
 done
  
 echo "${VAROPTS}"
+creating_env_file
 source .env
 sudo ansible-playbook $PLAYBOOK -e "$VAROPTS"
