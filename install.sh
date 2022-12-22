@@ -6,9 +6,9 @@ environment_set(){
     export VAROPTS="@env/${env}.yml"
 }
 creating_env_file(){
-    touch .env
-    cat "SLACK_TOKEN=${CI_SLACK_TOKEN}" > ".env"
-    cat "MONGO_URI=${CI_MONGO_URI}" >> ".env"
+
+    echo "SLACK_TOKEN=${CI_SLACK_TOKEN}" > ".env"
+    echo "MONGO_URI=${CI_MONGO_URI}" >> ".env"
 }
 while getopts ":e:" option; do 
   case "$option" in 
