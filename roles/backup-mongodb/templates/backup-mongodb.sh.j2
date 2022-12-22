@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-backup_file_name=$(date +"%d-%m-%Y" -d yesterday)
+backup_file_name=$(date +"%Y-%m-%d" -d yesterday)
 
 echo "Backing up database into {{ s3_backup_bucket_name }}"
 {% for schema in schemas %}
@@ -15,6 +15,7 @@ tar -zcvf "{{ backup_dir }}/${backup_file_name}.tar.gz" "{{ backup_dir }}/${back
 echo "Uploading to S3 backup ${backup_file_name}"
 mc cp "{{ backup_dir }}/${backup_file_name}.tar.gz" "{{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${backup_file_name}.tar.gz"
 echo "Finish backing up ${backup_file_name} into {{ s3_backup_bucket_name }}"
-previsou_file_backup_name=$(date +"%Y-%m-%d" -d "2 days ago")
+previsou_file_backup_name=$(date +"%Y-%m-%d" -d "3 days ago")
 echo "Cleaning previsou backup ${previsou_file_backup_name} from S3"
-mc rm "{{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${previsou_file_backup_name}"
+mc rm "{{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${previsou_file_backup_name}.tar.gz"
+
