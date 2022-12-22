@@ -1,4 +1,8 @@
 - hosts: localhost
+  vars:
+    mongodb_uri:     "{{ lookup('env','MONGO_URI') }}"
+    slack_token: "{{ lookup('env','SLACK_TOKEN') }}"
+
   roles:
     # - sudo
     # - common
