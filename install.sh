@@ -4,8 +4,10 @@ environment_set(){
     env="${1}"
     export PLAYBOOK="playbook-${env}.yml"
     export VAROPTS="@env/${env}.yml"
-    export SLACK_TOKEN="${CI_SLACK_TOKEN}"
-    export MONGO_URI="${CI_MONGO_URI}"
+}
+creating_env_file(){
+    cat "SLACK_TOKEN=${CI_SLACK_TOKEN}" >> ".env"
+    cat "MONGO_URI=${CI_MONGO_URI}" >> ".env"
 }
 while getopts ":e:" option; do 
   case "$option" in 
@@ -14,4 +16,5 @@ while getopts ":e:" option; do
 done
  
 echo "${VAROPTS}"
+source .env
 sudo ansible-playbook $PLAYBOOK -e "$VAROPTS"

@@ -2,7 +2,6 @@
 logs_directory: /var/log/amir-platform
 s3_alias: amirplatform-data
 s3_backup_bucket_name: amirplatform-data
-mongodb_uri: mongodb+srv://amirghediradb:bfDICLDyuklvKGDo@cluster0-bjmuu.mongodb.net/test
 backup_dir: /root/mongodb-backups
 schemas: 
   - users
@@ -13,4 +12,3 @@ schemas:
 
 slack_username: amir-platform-api
 slack_channel: "#amir-platform-api"
-slack_token: T048H296FU6/B049F180H6J/7g8hewoqK4Uv3QbZhJIobw9i
