@@ -19,4 +19,4 @@
     job: "{{ item.interpreter }} {{ node_home }}/{{ item.script }} > {{ node_home }}/{{ item.script }}.log 2>&1"
     cron_file: "{{ item.file }}"
   with_items: 
-    - { interpreter: "bash", script: "backup-logs.sh", hour: "10", minute: "0", file: "ansible_backup_logs" }
+    - { interpreter: "bash", script: "backup-logs.sh", hour: "0", minute: "0", file: "ansible_backup_logs" }

@@ -7,3 +7,5 @@ echo "Backing up ${log_file} into {{ s3_backup_bucket_name }}"
 message="Finish backing up ${log_file} into {{ s3_backup_bucket_name }}"
 echo "${message}"
 {{ node_home }}/slack_notification.sh "${message}"
+echo "Removing ${log_file} from server"
+rm -f {{ logs_directory }}/${log_file}
