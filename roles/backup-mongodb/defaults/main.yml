@@ -3,6 +3,8 @@ logs_directory: /var/log/amir-platform
 s3_alias: amirplatform-data
 s3_backup_bucket_name: amirplatform-data
 backup_dir: /root/mongodb-backups
+mc_bin: /usr/local/bin/mc
+mongoexport_bin: /usr/bin/mongoexport
 schemas: 
   - users
   - projects

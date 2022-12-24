@@ -6,7 +6,7 @@ backup_file_name=$(date +"%Y-%m-%d" -d yesterday)
 echo "Backing up database into {{ s3_backup_bucket_name }}"
 {% for schema in schemas %}
 echo "Extracting schema {{ schema }}"
-mongoexport --uri="{{ mongodb_uri }}"  --collection={{ schema }}  --out={{ backup_dir }}/${backup_file_name}/{{ schema }}.json
+{{ mongoexport_bin }} --uri="{{ mongodb_uri }}"  --collection={{ schema }}  --out={{ backup_dir }}/${backup_file_name}/{{ schema }}.json
 {% endfor %}
 
 echo "Compressing backup to {{ backup_dir }}/${backup_file_name}.tar.gz"
@@ -14,11 +14,11 @@ tar -zcvf "{{ backup_dir }}/${backup_file_name}.tar.gz" "{{ backup_dir }}/${back
 
 echo "Uploading to S3 backup ${backup_file_name}"
 {{ node_home }}/slack_notification.sh "Initiating database backup ${backup_file_name} into S3"
-mc cp "{{ backup_dir }}/${backup_file_name}.tar.gz" "{{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${backup_file_name}.tar.gz"
+{{ mc_bin }} cp "{{ backup_dir }}/${backup_file_name}.tar.gz" "{{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${backup_file_name}.tar.gz"
 echo "Finish backing up ${backup_file_name} into {{ s3_backup_bucket_name }}"
 previsou_file_backup_name=$(date +"%Y-%m-%d" -d "3 days ago")
 echo "Cleaning previous backup ${previsou_file_backup_name} from S3"
 {{ node_home }}/slack_notification.sh "Cleaning database backup ${previsou_file_backup_name}.tar.gz from S3"
-mc rm "{{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${previsou_file_backup_name}.tar.gz"
+{{ mc_bin }} rm "{{ s3_alias }}/{{ s3_backup_bucket_name }}/backups/${previsou_file_backup_name}.tar.gz"
 
 

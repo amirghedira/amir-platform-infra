@@ -2,3 +2,4 @@
 logs_directory: /var/log/amir-platform
 s3_alias: amirplatform-data
 s3_backup_bucket_name: amirplatform-data
+mc_bin: /usr/local/bin/mc

@@ -3,5 +3,7 @@
 log_file=$(date +"log-%d-%m-%Y.log" -d yesterday)
 
 echo "Backing up ${log_file} into {{ s3_backup_bucket_name }}"
-mc cp {{ logs_directory }}/${log_file} {{ s3_alias }}/{{ s3_backup_bucket_name }}/logs/${log_file}
-echo "Finish backing up ${log_file} into {{ s3_backup_bucket_name }}"
+{{ mc_bin }} cp {{ logs_directory }}/${log_file} {{ s3_alias }}/{{ s3_backup_bucket_name }}/logs/${log_file}
+message="Finish backing up ${log_file} into {{ s3_backup_bucket_name }}"
+echo "${message}"
+{{ node_home }}/slack_notification.sh "${message}"
